@@ -19,13 +19,13 @@ router.post('/', async (req, res) => {
     const [id] = await db('students').insert(req.body);
 
     const student = await db('students')
-      .where({ id })
+      .where({ cohort_id: id })
       .first();
 
     res.status(201).json(student);
-  } catch (error) {
-    const message = errors[error.errno] || 'We ran into an error';
-    res.status(500).json({ message, error });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "We ran into an error" });
   }
 })
 
