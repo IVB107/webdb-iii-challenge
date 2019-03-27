@@ -13,78 +13,64 @@ const db = knex(knexConfig);
 
 // C R U D
 
-// POST --> /api/cohorts
+// POST --> /api/students
 router.post('/', async (req, res) => {
   try {
-    const [id] = await db('cohorts').insert(req.body);
+    const [id] = await db('students').insert(req.body);
 
-    const cohort = await db('cohorts')
+    const student = await db('students')
       .where({ id })
       .first();
 
-    res.status(201).json(cohort);
+    res.status(201).json(student);
   } catch (error) {
     const message = errors[error.errno] || 'We ran into an error';
     res.status(500).json({ message, error });
   }
 })
 
-// GET --> /api/cohorts
+// GET --> /api/students
 router.get('/', async (req, res) => {
-  // get the cohorts from the database
+  // get the students from the database
   try {
-    const cohorts = await db('cohorts'); // all the records from the table
-    res.status(200).json(cohorts);
+    const students = await db('students'); // all the records from the table
+    res.status(200).json(students);
   } catch (error) {
     res.status(500).json(error);
   }
 });
 
-// GET --> /api/cohorts/:id
+// GET --> /api/students/:id
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const cohort = await db('cohorts')
+    const student = await db('students')
       .where({ id })
       .first();
-    res.status(200).json(cohort);
+    res.status(200).json(student);
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
   }
 });
 
-// GET --> /api/cohorts/:id/students
-router.get('/:id/students', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    students = await db('students')
-      .where({ cohort_id: id });
-    res.status(200).json(students);
-  } catch (err) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-});
-
-// PUT --> /api/cohorts/:id
+// PUT --> /api/students/:id
 router.put('/:id', async (req, res) => {
   const changes = req.body;
   const { id } = req.params;
 
   try {
-    count = await db('cohorts')
+    count = await db('students')
       .where({ id })
       .update(changes);
 
       if (count > 0){
-        const cohort = await db('cohorts')
+        const student = await db('students')
           .where({ id })
           .first();
-        res.status(200).json(cohort);
+        res.status(200).json(student);
       } else {
-        res.status(404).json({ message: "Cohort not found." });
+        res.status(404).json({ message: "Student not found." });
       }
   } catch (err) {
     console.log(err);
@@ -92,18 +78,18 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-// DELETE --> /api/cohorts/:id
+// DELETE --> /api/students/:id
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    count = await db('cohorts')
+    count = await db('students')
       .where({ id })
       .del();
 
       count > 0
         ? res.status(204).end()
-        : res.status(404).json({ message: "Cohort not found." });
+        : res.status(404).json({ message: "Student not found." });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
